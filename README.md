@@ -54,26 +54,26 @@ You need to connect the signal to your application’s startup by overriding the
 
 Make sure to update your INSTALLED_APPS in settings.py to use MyAppConfig.
 
-INSTALLED_APPS = [
-    'myapp.apps.MyAppConfig',
-    ...
-]
+    INSTALLED_APPS = [
+        'myapp.apps.MyAppConfig',
+        ...
+    ]
 
 
 #### 3. Triggering the Custom Signal
 To trigger the custom signal, you can use the send() method provided by the signal.
 
-# models.py
-from django.db import models
-from .signals import my_custom_signal
+    # models.py
+    from django.db import models
+    from .signals import my_custom_signal
 
-class MyModel(models.Model):
-    name = models.CharField(max_length=100)
+    class MyModel(models.Model):
+        name = models.CharField(max_length=100)
 
-    def save(self, *args, **kwargs):
-        created = self.pk is None  # Check if this is a new instance
-        super().save(*args, **kwargs)  # Call the original save method
-        my_custom_signal.send(sender=self.__class__, instance=self, created=created)
+        def save(self, *args, **kwargs):
+            created = self.pk is None  # Check if this is a new instance
+            super().save(*args, **kwargs)  # Call the original save method
+            my_custom_signal.send(sender=self.__class__, instance=self, created=created)
 
 
 #### 4. Example Usage
