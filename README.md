@@ -17,39 +17,39 @@ To create a custom signal, you will need:
 ##### Step 1: Import Required Modules
 You will begin by importing the required modules from Django.
 
-from django.dispatch import Signal, receiver
+    from django.dispatch import Signal, receiver
 
 
 ##### Step 2: Define Your Custom Signal
 Define a custom signal in a separate file, typically within your app's directory (e.g., signals.py).
 
-# signals.py
-my_custom_signal = Signal(providing_args=["instance", "created"])
+    # signals.py
+    my_custom_signal = Signal(providing_args=["instance", "created"])
 
 
 ##### Step 3: Create a Receiver Function
 Next, create a function that will act as a receiver for your custom signal. This function will receive the signal and perform any desired actions.
 
-# receivers.py
-@receiver(my_custom_signal)
-def my_signal_handler(instance, created, **kwargs):
-    if created:
-        print(f'New instance created: {instance}')
-    else:
-        print(f'Instance updated: {instance}')
+    # receivers.py
+    @receiver(my_custom_signal)
+    def my_signal_handler(instance, created, **kwargs):
+        if created:
+            print(f'New instance created: {instance}')
+        else:
+            print(f'Instance updated: {instance}')
 
 
 ##### Step 4: Connect the Signal in Your AppConfig
 You need to connect the signal to your application’s startup by overriding the ready method in apps.py.
 
-# apps.py
-from django.apps import AppConfig
+    # apps.py
+    from django.apps import AppConfig
 
-class MyAppConfig(AppConfig):
-    name = 'myapp'
+    class MyAppConfig(AppConfig):
+        name = 'myapp'
 
-    def ready(self):
-        import myapp.signals  # Import and register the signals
+        def ready(self):
+            import myapp.signals  # Import and register the signals
 
 
 Make sure to update your INSTALLED_APPS in settings.py to use MyAppConfig.
